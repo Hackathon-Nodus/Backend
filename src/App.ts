@@ -4,6 +4,8 @@ import { connectDatabase } from './config/database';
 import authRoutes from './routes/authRoutes';
 import solutionRoutes from './routes/solutionRoutes';
 import aiRoutes from './routes/aiRoutes';
+import userRoutes from './routes/userRoutes';
+import notificationRoutes from './routes/notificationRoutes';
 import { errorHandler, notFoundHandler } from './middleware/errorHandler';
 import { env } from './config/env';
 import dotenv from "dotenv";
@@ -22,6 +24,8 @@ app.get('/api/v1/health', (_req: Request, res: Response) => {
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/solutions', solutionRoutes);
 app.use('/api/v1/ai',aiRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/notifications', notificationRoutes);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
@@ -34,4 +38,8 @@ const start = async (): Promise<void> => {
     });
 };
 
-void start();
+if (process.env.NODE_ENV !== 'test') {
+    void start();
+}
+
+export default app;

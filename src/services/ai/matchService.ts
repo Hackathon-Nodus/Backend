@@ -1,19 +1,24 @@
 
 
-
-
-
-
-
-import { genAI } from "./aiClient";
+import { generateJson } from './aiClient';
 import { validateMatchInput } from "../../validations/ai.validation";
-export const matchSolver = async (problem: any, solvers: any[]) => {
- 
-  
-  try{
-validateMatchInput(problem, solvers);
 
-  const prompt = `
+interface MatchResult {
+  matches: Array<{
+    solverId: string;
+    matchScore: number;
+    reason: string;
+    confidence: string;
+  }>;
+  topPick?: string;
+  message?: string;
+}
+
+export const matchSolver = async (problem: any, solvers: any[]) => {
+  try{
+    validateMatchInput(problem, solvers);
+
+    const prompt = `
 You are an expert matching system.
 
 PROBLEM:
@@ -45,23 +50,18 @@ Return ONLY valid JSON:
 
 `;
 
- const model=genAI.getGenerativeModel({model:"gemini-1.5-flash"});
- const result=await model.generateContent(prompt);
- const response=await result.response;
- const content=response.text();
+    const fallback: MatchResult = {
+      matches: [],
+      message: 'Matching temporarily unavailable'
+    };
 
-
-if(!content){
-  throw new Error("No content found");
-}
-    const cleanContent = content.replace(/```json/g, '').replace(/```/g, '').trim();
-    return JSON.parse(cleanContent);
+    return await generateJson<MatchResult>(prompt, fallback);
   }catch(err){
     console.error("Matching Error: ",err);
     return {
         matches:[],
-        messsage:"Matching temporarily unavailable"
-      }
+        message:"Matching temporarily unavailable"
+      } as MatchResult;
     
   }
   

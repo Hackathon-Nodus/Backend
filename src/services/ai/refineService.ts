@@ -1,15 +1,28 @@
 
+import { generateJson } from './aiClient';
 
-
-import {genAI} from './aiClient';
+export interface RefineResult {
+  refinedTitle: string;
+  refinedDesc: string;
+  suggestedTags: string[];
+  difficulty: 'easy' | 'medium' | 'hard';
+  suggestedBudget: number;
+}
 
 
 export const refineProblem=async(
   rawTitle:string,
   rawDesc:string,
   category:string|null
-)=>{
-  try{
+) : Promise<RefineResult> => {
+  const fallback: RefineResult = {
+    refinedTitle: rawTitle,
+    refinedDesc: rawDesc,
+    suggestedTags: ['problem-solving', category || 'general'],
+    difficulty: 'medium',
+    suggestedBudget: 100
+  };
+
    const prompt=`Refine this problem: 
    
    TITLE:${rawTitle}
@@ -26,30 +39,5 @@ export const refineProblem=async(
    }
    `;
 
-   const model=genAI.getGenerativeModel({model:"gemini-1.5-flash"});
-
-   const result=await model.generateContent(prompt);
-   const response= await result.response;
-
-   const content=response.text();
-
-   if(!content){
-       throw new Error("No content recieved")
-    }
-  
-console.log("AI Contents: ",content);
-let cleanContent= content?.replace(/```json/g, '').replace(/```/g, '').trim();
-return JSON.parse(cleanContent);
-  }catch(error){
-          console.error("Refine Error:", error);
-
-          return{
-            refinedTitle:rawTitle,
-            refinedDesc:rawDesc,
-            suggestedTags:['problem-solving',category || 'general'],
-            difficulty:'medium',
-            suggestedBudget:100
-
-          }
-  }
-}
+   return generateJson<RefineResult>(prompt, fallback);
+};
