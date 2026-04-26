@@ -23,7 +23,7 @@ app.get('/api/v1/health', (_req: Request, res: Response) => {
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/solutions', solutionRoutes);
-app.use('/api/v1/ai',aiRoutes);
+app.use('/api/v1/ai', aiRoutes);
 app.use('/api/v1/users', userRoutes);
 app.use('/api/v1/notifications', notificationRoutes);
 

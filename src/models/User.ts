@@ -153,7 +153,7 @@ userSchema.pre('save', function (next) {
 });
 
 // Remove sensitive data when converting to JSON
-userSchema.methods.toJSON = function(): Partial<IUser> {
+userSchema.methods.toJSON = function (): Partial<IUser> {
   const user = this.toObject() as Record<string, unknown>;
   delete user.password;
   delete user.__v;

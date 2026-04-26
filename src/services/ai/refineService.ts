@@ -10,11 +10,11 @@ export interface RefineResult {
 }
 
 
-export const refineProblem=async(
-  rawTitle:string,
-  rawDesc:string,
-  category:string|null
-) : Promise<RefineResult> => {
+export const refineProblem = async (
+  rawTitle: string,
+  rawDesc: string,
+  category: string | null
+): Promise<RefineResult> => {
   const fallback: RefineResult = {
     refinedTitle: rawTitle,
     refinedDesc: rawDesc,
@@ -23,11 +23,11 @@ export const refineProblem=async(
     suggestedBudget: 100
   };
 
-   const prompt=`Refine this problem: 
+  const prompt = `Refine this problem: 
    
    TITLE:${rawTitle}
    Desc:${rawDesc}
-   CATEGORY:${category||"Not specified"}
+   CATEGORY:${category || "Not specified"}
 
    Rerurn only valid JSON
    {
@@ -39,5 +39,5 @@ export const refineProblem=async(
    }
    `;
 
-   return generateJson<RefineResult>(prompt, fallback);
+  return generateJson<RefineResult>(prompt, fallback);
 };

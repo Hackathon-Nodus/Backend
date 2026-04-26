@@ -15,7 +15,7 @@ interface MatchResult {
 }
 
 export const matchSolver = async (problem: any, solvers: any[]) => {
-  try{
+  try {
     validateMatchInput(problem, solvers);
 
     const prompt = `
@@ -27,13 +27,13 @@ Tags: ${problem.tags?.join(", ") || "none"}
 Difficulty:${problem.difficulty || 'Medium'}
 
 SOLVERS:
-${JSON.stringify(solvers.map(s =>({
-  id:s._id,
-  name:s.name,
-  skills:s.skills || [],
-  repScore:s.repScore || 0,
-  rating:s.rating?.avg || 0
-})), null, 2)}
+${JSON.stringify(solvers.map(s => ({
+      id: s._id,
+      name: s.name,
+      skills: s.skills || [],
+      repScore: s.repScore || 0,
+      rating: s.rating?.avg || 0
+    })), null, 2)}
 
 Return ONLY valid JSON:
 {
@@ -56,13 +56,13 @@ Return ONLY valid JSON:
     };
 
     return await generateJson<MatchResult>(prompt, fallback);
-  }catch(err){
-    console.error("Matching Error: ",err);
+  } catch (err) {
+    console.error("Matching Error: ", err);
     return {
-        matches:[],
-        message:"Matching temporarily unavailable"
-      } as MatchResult;
-    
+      matches: [],
+      message: "Matching temporarily unavailable"
+    } as MatchResult;
+
   }
-  
+
 };
