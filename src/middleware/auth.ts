@@ -16,3 +16,4 @@ export const requireAuth = (
     req.user = { id: userId };
     next();
 };
+export default requireAuth

@@ -42,4 +42,5 @@ const solutionSchema = new Schema<ISolution>(
 
 solutionSchema.index({ problemId: 1, votes: -1 });
 
-export const Solution = model<ISolution>('Solution', solutionSchema);
+  const Solution = model<ISolution>('Solution', solutionSchema);
+export default Solution
