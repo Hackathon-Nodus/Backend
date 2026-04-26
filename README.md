@@ -51,6 +51,38 @@ Development mode:
 ```bash
 npm run dev
 ```
+# Authentication API Documentation
+
+Base URL: `http://localhost:<PORT>/api/v1/auth`
+
+---
+
+## Endpoints
+
+### 1. Register User
+
+Creates a new user account.
+
+- **URL:** `/register`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+
+#### Request Body
+
+| Field      | Type   | Required | Description          |
+|------------|--------|----------|----------------------|
+| `name`     | string | Yes      | User's full name     |
+| `email`    | string | Yes      | User's email address |
+| `password` | string | Yes      | User's password      |
+
+#### Example Request
+
+```json
+{
+  "name": "John Doe",
+  "email": "john@example.com",
+  "password": "securePassword123"
+}
 
 Type-check only:
 
