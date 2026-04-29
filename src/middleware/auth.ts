@@ -1,32 +1,46 @@
-import { NextFunction, Response } from 'express';
-import { AuthenticatedRequest } from '../types/express';
-import { getBearerToken, getTokenFromCookieHeader, verifyToken } from '../utils/tokenUtils';
 
+
+import { Request, Response, NextFunction } from 'express';
+
+// Extend Express Request type
+declare global {
+    namespace Express {
+        interface Request {
+            user?: {
+                id: string;
+                email: string;
+                name: string;
+                roles: string[];
+            };
+        }
+    }
+}
+
+// Simple auth without JWT for now (since your teammate's code doesn't use JWT)
 export const requireAuth = (
-    req: AuthenticatedRequest,
+    req: Request,
     res: Response,
     next: NextFunction
 ): void => {
-    const bearerToken = getBearerToken(req.header('authorization'));
-    const cookieToken = getTokenFromCookieHeader(req.header('cookie'));
-    const token = bearerToken || cookieToken;
-
-    if (!token) {
-        res.status(401).json({ message: 'Unauthorized. Missing bearer token.' });
+    // Get user ID from header (as per your teammate's implementation)
+    const userId = req.headers['x-user-id'] as string;
+    
+    if (!userId) {
+        res.status(401).json({ 
+            success: false,
+            message: 'Unauthorized. Missing x-user-id header.' 
+        });
         return;
     }
 
-    try {
-        const payload = verifyToken(token);
-        req.user = {
-            id: payload.userId,
-            email: payload.email,
-            role: payload.role
-        };
-        next();
-    } catch (error) {
-        res.status(401).json({ message: 'Unauthorized. Invalid or expired token.' });
-    }
+    // Add user to request
+    req.user = { 
+        id: userId,
+        email: '',
+        name: '',
+        roles: ['client']
+    };
+    next();
 };
 
 export default requireAuth;

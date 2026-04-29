@@ -47,12 +47,13 @@ export const JWT_EXPIRES_IN = getEnv('JWT_EXPIRES_IN', '1h');
 export const JWT_REFRESH_EXPIRES_IN = getEnv('JWT_REFRESH_EXPIRES_IN', '7d');
 
 export const env: EnvConfig = {
-    PORT,
-    NODE_ENV,
-    MONGO_URI,
-    GEMINI_API_KEY,
-    JWT_SECRET,
-    JWT_REFRESH_TOKEN,
-    JWT_EXPIRES_IN,
-    JWT_REFRESH_EXPIRES_IN
-};
+    PORT: parseInt(process.env.PORT || '3000', 10),
+    NODE_ENV: process.env.NODE_ENV || 'development',
+    MONGO_URI: process.env.MONGO_URI || 'mongodb+srv://root:12345@cluster0.b5cjst2.mongodb.net/?appName=Cluster0',
+    GEMINI_API_KEY: getRequiredEnv('GEMINI_API_KEY'),
+    JWT_SECRET: process.env.JWT_SECRET || 'your_jwt_secret',
+    JWT_REFRESH_TOKEN: process.env.JWT_REFRESH_TOKEN || 'your_jwt_refresh_token',
+    JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '1h',
+    JWT_REFRESH_EXPIRES_IN: process.env.JWT_REFRESH_EXPIRES_IN || '7d'
+}
+    // MONGO_URI: process.env.MONGO_URI ||'mongodb://localhost:27017/myapp' ,
