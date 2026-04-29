@@ -12,7 +12,10 @@ import path from "path";
 const app = express();
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
-app.use(cors());
+app.use(cors({
+     origin: ['http://localhost:5173', 'http://localhost:3000'],
+    credentials: true
+}));
 app.use(express.json());
 
 app.get('/api/v1/health', (_req: Request, res: Response) => {
