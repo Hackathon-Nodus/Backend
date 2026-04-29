@@ -1,7 +1,27 @@
 import { Request } from 'express';
 
-export interface AuthenticatedRequest extends Request {
-    user?: {
-        id: string;
-    };
+export interface AuthUser {
+    id: string;
+    email?: string;
+    role?: string;
 }
+
+export interface TokenPayload {
+    userId: string;
+    email?: string;
+    role?: string;
+}
+
+export interface AuthenticatedRequest extends Request {
+    user?: AuthUser;
+}
+
+declare global {
+    namespace Express {
+        interface Request {
+            user?: AuthUser;
+        }
+    }
+}
+
+export { };
