@@ -2,6 +2,7 @@ import { Document, Schema, Types, model } from 'mongoose';
 
 export interface ISolution extends Document {
     problemId: Types.ObjectId;
+    createdBy: Types.ObjectId;
     content: string;
     link?: string;
     votes: number;
@@ -13,6 +14,12 @@ const solutionSchema = new Schema<ISolution>(
         problemId: {
             type: Schema.Types.ObjectId,
             ref: 'Problem',
+            required: true,
+            index: true
+        },
+        createdBy: {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
             required: true,
             index: true
         },
@@ -41,5 +48,7 @@ const solutionSchema = new Schema<ISolution>(
 );
 
 solutionSchema.index({ problemId: 1, votes: -1 });
+solutionSchema.index({ createdBy: 1, createdAt: -1 });
 
-export const Solution = model<ISolution>('Solution', solutionSchema);
+const Solution = model<ISolution>('Solution', solutionSchema);
+export default Solution;
